@@ -1,0 +1,29 @@
+--- 
+abstract: Automatically encode column values
+author: 
+  - Guillermo Roditi (groditi) <groditi@cpan.org>
+build_requires: 
+  DBD::SQLite: 0
+  Digest::SHA: 0
+  File::Spec: 0
+  SQL::Translator: 0.08000
+  Test::More: 0
+distribution_type: module
+generated_by: Module::Install version 0.68
+license: perl
+meta-spec: 
+  url: http://module-build.sourceforge.net/META-spec-v1.3.html
+  version: 1.3
+name: DBIx-Class-EncodedColumn
+no_index: 
+  directory: 
+    - inc
+    - t
+recommends: 
+  Crypt::Eksblowfish::Bcrypt: 0
+  Digest: 1.11
+  Digest::MD5: 0
+  Digest::SHA: 0
+requires: 
+  DBIx::Class: 0.06002
+version: 0.00001_01
