@@ -65,6 +65,14 @@ if( $sha_ok ) {
                     encode_column => 1,
                     encode_class  => 'Digest',
                    },
+     sha256_b64_salted => {
+                           data_type => 'char',
+                           size      => 57,
+                           encode_column => 1,
+                           encode_class  => 'Digest',
+                           encode_check_method => 'check_sha256_b64_salted',
+                           encode_args   => {salt_length => 14}
+                         },
     );
 }
 

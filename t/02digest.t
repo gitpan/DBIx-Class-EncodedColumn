@@ -16,7 +16,7 @@ BEGIN {
 }
 
 my $tests = 5;
-$tests += 19 if $sha_ok;
+$tests += 21 if $sha_ok;
 $tests += 6  if $bcrypt_ok;
 
 plan tests => $tests;
@@ -45,8 +45,10 @@ if( $sha_ok ){
 
 my %create_vals = (dummy_col  => 'test1');
 if( $sha_ok ){
-  $create_vals{$_} = 'test1' for(qw/sha1_hex sha1_b64 sha256_hex sha256_b64/);
+  $create_vals{$_} = 'test1'
+    for(qw/sha1_hex sha1_b64 sha256_hex sha256_b64 sha256_b64_salted/);
 }
+
 if( $bcrypt_ok ){
   $create_vals{$_} = 'test1' for(qw/bcrypt_1 bcrypt_2/);
 }
@@ -75,10 +77,23 @@ if( $sha_ok ) {
   is($row->sha1_b64,   $checks->{'SHA-1'}{base64}{test1},  'b64 sha1 on create');
   is($row->sha256_hex, $checks->{'SHA-256'}{hex}{test1},   'hex sha256 on create');
   is($row->sha256b64,  $checks->{'SHA-256'}{base64}{test1},'b64 sha256 on create');
+  is( length($row->sha256_b64_salted), 57, 'correct salted length');
+
+#   my $salted_check = sub {
+#     my $col_v = $_[0]->get_column('sha256_b64_salted');
+#     my $target = substr($col_v, 0, 43);
+#     my $salt   = substr($col_v, 43);
+#     my $maybe = $_[0]->_column_encoders->{'sha256_b64_salted'}->($_[1], $salt);
+#     print STDERR "$_[1]\t${salt}\t${maybe}\n";
+#     $maybe eq $col_v;
+#  };
+
+  #die unless $salted_check->($row, 'test1');
 
   can_ok($row, qw/check_sha1_hex check_sha1_b64/);
   ok($row->check_sha1_hex('test1'),'Checking hex digest_check_method');
   ok($row->check_sha1_b64('test1'),'Checking b64 digest_check_method');
+  ok($row->check_sha256_b64_salted('test1'), 'Checking salted digest_check_method');
 
   $row->sha1_hex('test2');
   is($row->sha1_hex, $checks->{'SHA-1'}{hex}{test2}, 'Checking accessor');

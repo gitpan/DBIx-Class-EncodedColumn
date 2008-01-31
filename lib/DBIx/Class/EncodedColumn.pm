@@ -8,7 +8,7 @@ use Digest;
 
 __PACKAGE__->mk_classdata( _column_encoders => {} );
 
-our $VERSION = '0.00001_01';
+our $VERSION = '0.00001_02';
 
 sub register_column {
   my $self = shift;
@@ -28,13 +28,13 @@ sub register_column {
   eval "require ${class};";
   $self->throw_exception("Failed to use encode_class '${class}': $@") if $@;
 
-  defined( my $encode_sub = eval{ $class->make_encode_sub($args) }) ||
+  defined( my $encode_sub = eval{ $class->make_encode_sub($column, $args) }) ||
     $self->throw_exception("Failed to create encoder with class '$class': $@");
   $self->_column_encoders->{$column} = $encode_sub;
 
   if ( exists $info->{encode_check_method} && $info->{encode_check_method} ){
     no strict 'refs';
-    defined( my $check_sub = eval{ $class->make_check_sub($column) }) ||
+    defined( my $check_sub = eval{ $class->make_check_sub($column, $args) }) ||
       $self->throw_exception("Failed to create checker with class '$class': $@");
     *{$self->result_class.'::'.$info->{encode_check_method}} = $check_sub;
   }

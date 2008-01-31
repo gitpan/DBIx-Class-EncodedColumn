@@ -4,10 +4,10 @@ use strict;
 use warnings;
 use Crypt::Eksblowfish::Bcrypt ();
 
-our $VERSION = '0.00001_01';
+our $VERSION = '0.00001_02';
 
 sub make_encode_sub {
-  my($class, $args) = @_;
+  my($class, $col, $args) = @_;
   my $cost = exists $args->{cost}    ? $args->{cost}    : 8;
   my $nul  = exists $args->{key_nul} ? $args->{key_nul} : 1;
 
@@ -23,10 +23,12 @@ sub make_encode_sub {
   my $settings_base = join('','$2',$nul,'$',$cost, '$');
 
   my $encoder = sub {
-    my ($plain_text) = @_;
-    my $salt = join('', map { chr(int(rand(256))) } 1 .. 16);
-    $salt = Crypt::Eksblowfish::Bcrypt::en_base64( $salt );
-    my $settings_str =  $settings_base.$salt;
+    my ($plain_text, $settings_str) = @_;
+    unless ( $settings_str ) {
+      my $salt = join('', map { chr(int(rand(256))) } 1 .. 16);
+      $salt = Crypt::Eksblowfish::Bcrypt::en_base64( $salt );
+      $settings_str =  $settings_base.$salt;
+    }
     return Crypt::Eksblowfish::Bcrypt::bcrypt($plain_text, $settings_str);
   };
 
@@ -34,12 +36,13 @@ sub make_encode_sub {
 }
 
 sub make_check_sub {
-  my($class, $col) = @_;
-  return sub {
-    my ($self, $check) = @_;
-    my $target = $self->get_column($col);
-    $target eq Crypt::Eksblowfish::Bcrypt::bcrypt($check, $target);
-  }
+  my($class, $col, $args) = @_;
+
+  #fast fast fast
+  return eval qq^ sub {
+    my \$col_v = \$_[0]->get_column('${col}');
+    \$_[0]->_column_encoders->{${col}}->(\$_[1], \$col_v) eq \$col_v;
+  } ^ || die($@);
 }
 
 1;
@@ -85,11 +88,11 @@ hash function. Defaults to 8.
 
 =head1 METHODS
 
-=head2 make_encode_sub \%args
+=head2 make_encode_sub $column_name, \%encode_args
 
 Returns a coderef that accepts a plaintext value and returns an encoded value
 
-=head2 make_check_sub $column_name
+=head2 make_check_sub $column_name, \%encode_args
 
 Returns a coderef that when given the row object and a plaintext value will
 return a boolean if the plaintext matches the encoded value. This is typically
