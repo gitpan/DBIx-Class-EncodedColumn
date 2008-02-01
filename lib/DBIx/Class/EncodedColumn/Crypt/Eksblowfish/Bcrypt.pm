@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Crypt::Eksblowfish::Bcrypt ();
 
-our $VERSION = '0.00001_03';
+our $VERSION = '0.00001';
 
 sub make_encode_sub {
   my($class, $col, $args) = @_;

@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Digest;
 
-our $VERSION = '0.00001_03';
+our $VERSION = '0.00001';
 
 my %digest_lengths =
   (
