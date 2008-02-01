@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Digest;
 
-our $VERSION = '0.00001_02';
+our $VERSION = '0.00001_03';
 
 my %digest_lengths =
   (
@@ -86,10 +86,10 @@ DBIx::Class::EncodedColumn::Digest
   __PACKAGE__->add_columns(
     'password' => {
       data_type   => 'CHAR',
-      size        => 40,
+      size        => 40 + 10,
       encode_column => 1,
       encode_class  => 'Digest',
-      encode_args   => {algorithm => 'SHA-1', format => 'hex'},
+      encode_args   => {algorithm => 'SHA-1', format => 'hex', salt_length => 10},
       encode_check_method => 'check_password',
   }
 
@@ -109,12 +109,12 @@ DBIx::Class::EncodedColumn::Digest
 
 =head1 ACCEPTED ARGUMENTS
 
-=head2 digest_encoding
+=head2 format
 
 The encoding to use for the digest. Valid values are 'binary', 'hex', and
 'base64'. Will default to 'base64' if not specified.
 
-=head2 digest_algorithm
+=head2 algorithm
 
 The digest algorithm to use for the digest. You may specify any valid L<Digest>
 algorithm. Examples are L<MD5|Digest::MD5>, L<SHA-1|Digest::SHA>,
@@ -122,17 +122,48 @@ L<Whirlpool|Digest::Whirlpool> etc. Will default to 'SHA-256' if not specified.
 
 See L<Digest> for supported digest algorithms.
 
+=head2 salt_length
+
+If you would like to use randomly generated salts to encode values make sure
+this option is set to > 0. Salts will be automatically generated at encode time
+and will be appended to the end of the digest. Please make sure that you
+remember to make sure that to expand the size of your db column to have enough
+space to store both the digest AND the salt. Please see list below for common
+digest lengths.
+
 =head1 METHODS
 
 =head2 make_encode_sub $column_name, \%encode_args
 
-Returns a coderef that accepts a plaintext value and returns an encoded value
+Returns a coderef that takes two arguments, a plaintext value and an optional
+salt and returns the encoded value with the salt appended to the end of the
+digest. If a salt is not provided and the salt_length option was greater than
+zero it will be randomly generated.
 
 =head2 make_check_sub $column_name, \%encode_args
 
-Returns a coderef that when given the row object and a plaintext value will
+Returns a coderef that takes the row object and a plaintext value and will
 return a boolean if the plaintext matches the encoded value. This is typically
 used for password authentication.
+
+=head1 COMMON DIGEST LENGTHS
+
+     CIPHER    | Binary | Base64 |  Hex
+   ---------------------------------------
+   | MD2       |   16   |   22   |  32  |
+   | MD4       |   16   |   22   |  32  |
+   | MD5       |   16   |   22   |  32  |
+   | SHA-1     |   20   |   27   |  40  |
+   | SHA-256   |   32   |   43   |  64  |
+   | SHA-384   |   48   |   64   |  96  |
+   | SHA-512   |   64   |   86   | 128  |
+   | CRC-CCITT |    3   |    2   |   3  |
+   | CRC-16    |    5   |    6   |   4  |
+   | CRC-32    |   10   |   14   |   8  |
+   | Adler-32  |    4   |    6   |   8  |
+   | Whirlpool |   64   |   86   | 128  |
+   | Haval-256 |   32   |   44   |  64  |
+   ---------------------------------------
 
 =head1 SEE ALSO
 

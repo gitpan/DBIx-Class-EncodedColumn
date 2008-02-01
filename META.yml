@@ -26,4 +26,4 @@ recommends:
   Digest::SHA: 0
 requires: 
   DBIx::Class: 0.06002
-version: 0.00001_02
+version: 0.00001_03

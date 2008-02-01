@@ -8,7 +8,7 @@ use Digest;
 
 __PACKAGE__->mk_classdata( _column_encoders => {} );
 
-our $VERSION = '0.00001_02';
+our $VERSION = '0.00001_03';
 
 sub register_column {
   my $self = shift;
@@ -88,10 +88,10 @@ In your L<DBIx::Class> Result class
   __PACKAGE__->add_columns(
     'password' => {
       data_type   => 'CHAR',
-      size        => 40,
+      size        => 40 + 10,
       encode_column => 1,
       encode_class  => 'Digest',
-      encode_args   => {algorithm => 'SHA-1', format => 'hex'},
+      encode_args   => {algorithm => 'SHA-1', format => 'hex', salt_length => 10},
       encode_check_method => 'check_password',
   }
 
