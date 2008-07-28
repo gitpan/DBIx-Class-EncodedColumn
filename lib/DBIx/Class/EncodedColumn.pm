@@ -5,10 +5,11 @@ use warnings;
 
 use base qw/DBIx::Class/;
 use Digest;
+use Sub::Name;
 
 __PACKAGE__->mk_classdata( _column_encoders => {} );
 
-our $VERSION = '0.00001';
+our $VERSION = '0.00002';
 
 sub register_column {
   my $self = shift;
@@ -36,7 +37,8 @@ sub register_column {
     no strict 'refs';
     defined( my $check_sub = eval{ $class->make_check_sub($column, $args) }) ||
       $self->throw_exception("Failed to create checker with class '$class': $@");
-    *{$self->result_class.'::'.$info->{encode_check_method}} = $check_sub;
+    my $name = join '::', $self->result_class, $info->{encode_check_method};
+    *$name = subname $name, $check_sub;
   }
 }
 

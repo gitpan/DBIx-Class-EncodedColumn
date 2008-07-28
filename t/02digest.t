@@ -9,18 +9,21 @@ use File::Spec;
 use FindBin '$Bin';
 use lib File::Spec->catdir($Bin, 'lib');
 
-my ($sha_ok, $bcrypt_ok);
+my ($sha_ok, $bcrypt_ok, $pgp_ok);
 BEGIN {
   $sha_ok    = eval 'require Digest' && eval 'require Digest::SHA;';
   $bcrypt_ok = eval 'require Crypt::Eksblowfish::Bcrypt';
+  $pgp_ok    = eval 'require Crypt::OpenPGP';
 }
 
 my $tests = 5;
 $tests += 21 if $sha_ok;
 $tests += 6  if $bcrypt_ok;
+$tests += 6  if $pgp_ok;
 
 plan tests => $tests;
 
+#1
 use_ok("DigestTest");
 
 my $schema = DigestTest->init_schema;
@@ -55,9 +58,11 @@ if( $bcrypt_ok ){
 
 my $row = $rs->create( \%create_vals );
 
-is($row->dummy_col,  'test1',                            'dummy on create');
+#2
+is($row->dummy_col,  'test1','dummy on create');
 ok(!$row->can('check_dummy_col'));
 
+#8
 if( $bcrypt_ok ){
   is( length($row->bcrypt_1), 60, 'correct length');
   is( length($row->bcrypt_2), 59, 'correct length');
@@ -72,6 +77,7 @@ if( $bcrypt_ok ){
   ok( $row->bcrypt_2_check('test2'));
 }
 
+#14
 if( $sha_ok ) {
   is($row->sha1_hex,   $checks->{'SHA-1'}{hex}{test1},     'hex sha1 on create');
   is($row->sha1_b64,   $checks->{'SHA-1'}{base64}{test1},  'b64 sha1 on create');
@@ -111,12 +117,13 @@ if( $sha_ok ) {
   $row->update;
 
 } else {
-
+  #1
   $row->update({dummy_col => 'test2'});
   is($row->dummy_col,  'test2', 'dummy on update');
 
 }
 
+#4
 if( $sha_ok ) {
   my $copy = $row->copy({sha256_b64 => 'test2'});
   is($copy->sha1_hex,   $checks->{'SHA-1'}{hex}{test2},     'hex sha1 on copy');
@@ -125,14 +132,50 @@ if( $sha_ok ) {
   is($copy->sha256b64,  $checks->{'SHA-256'}{base64}{test2},'b64 sha256 on copy');
 }
 
+#1
 my $new = $rs->new( \%create_vals );
 is($new->dummy_col,  'test1', 'dummy on new');
 
+#4
 if( $sha_ok ){
   is($new->sha1_hex,   $checks->{'SHA-1'}{hex}{test1},      'hex sha1 on new');
   is($new->sha1_b64,   $checks->{'SHA-1'}{base64}{test1},   'b64 sha1 on new');
   is($new->sha256_hex, $checks->{'SHA-256'}{hex}{test1},    'hex sha256 on new');
   is($new->sha256b64,  $checks->{'SHA-256'}{base64}{test1}, 'b64 sha256 on new');
+}
+
+#6
+if ( $pgp_ok ) {
+    my $row = $rs->create( {
+        dummy_col          => 'Dummy Column',
+        pgp_col_passphrase => 'Test Encrypted Column with Passphrase',
+        pgp_col_key        => 'Test Encrypted Column with Key Exchange',
+        pgp_col_key_ps     => 'Test Encrypted Column with Key Exchange + Pass',
+    } );
+
+    like($row->pgp_col_passphrase, qr/BEGIN PGP MESSAGE/, 'Passphrase encrypted');
+    like($row->pgp_col_key, qr/BEGIN PGP MESSAGE/, 'Key encrypted');
+    like($row->pgp_col_key_ps, qr/BEGIN PGP MESSAGE/, 'Key+Passphrase encrypted');
+
+    is(
+        $row->decrypt_pgp_passphrase('Secret Words'),
+        'Test Encrypted Column with Passphrase',
+        'Passphrase decryption/encryption'
+    );
+
+    is(
+        $row->decrypt_pgp_key,
+        'Test Encrypted Column with Key Exchange',
+        'Key Exchange decryption/encryption'
+    );
+
+    is(
+        $row->decrypt_pgp_key_ps('Secret Words'),
+        'Test Encrypted Column with Key Exchange + Pass',
+        'Secured Key Exchange decryption/encryption'
+    );
+
+
 }
 
 DigestTest->clear;

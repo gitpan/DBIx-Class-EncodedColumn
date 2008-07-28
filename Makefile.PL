@@ -10,6 +10,7 @@ all_from 'lib/DBIx/Class/EncodedColumn.pm';
 
 # Specific dependencies
 requires 'DBIx::Class' => '0.06002';
+requires 'Sub::Name' => '0.04';
 
 #build dependencies
 build_requires 'Test::More';
@@ -19,10 +20,23 @@ build_requires 'Digest::SHA';
 build_requires 'File::Spec';
 
 #recommended modules
-recommends 'Digest' => '1.11';
-recommends 'Digest::MD5';
-recommends 'Digest::SHA';
-recommends 'Crypt::Eksblowfish::Bcrypt';
+feature 'Digest::MD5 Support?',
+    -default => 1,
+    'Digest',
+    'Digest::MD5';
 
-auto_install;
+feature 'Digest::SHA Support?',
+    -default => 1,
+    'Digest',
+    'Digest::SHA';
+
+feature 'Blowfish Support?',
+    -default => 1,
+    'Crypt::Eksblowfish::Bcrypt';
+
+feature  'Crypt::OpenPGP (gpg) Support?',
+    -default => 1,
+    'Crypt::OpenPGP',
+    'Crypt::CAST5_PP';
+
 WriteAll;
