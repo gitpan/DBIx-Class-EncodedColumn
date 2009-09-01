@@ -9,7 +9,7 @@ use Sub::Name;
 
 __PACKAGE__->mk_classdata( _column_encoders => {} );
 
-our $VERSION = '0.00002';
+our $VERSION = '0.00003';
 
 sub register_column {
   my $self = shift;
@@ -105,7 +105,7 @@ In your L<DBIx::Class> Result class
       encode_column => 1,
       encode_class  => 'Digest',
       encode_args   => {algorithm => 'MD5', format => 'base64'},
-      digest_check_method => 'check_password',
+      encode_check_method => 'check_password',
   }
 
   #Eksblowfish bcrypt / cost of 8/ no key_nul / generate check method
@@ -116,7 +116,7 @@ In your L<DBIx::Class> Result class
       encode_column => 1,
       encode_class  => 'Crypt::Eksblowfish::Bcrypt',
       encode_args   => { key_nul => 0, cost => 8 },
-      digest_check_method => 'check_password',
+      encode_check_method => 'check_password',
   }
 
 In your application code:
@@ -175,7 +175,7 @@ any other options will become noops.
 
 =head2 encode_check_method => $method_name
 
-By using the digest_check_method attribute when you declare a column you
+By using the encode_check_method attribute when you declare a column you
 can create a check method for that column. The check method accepts a plain
 text string, and returns a boolean that indicates whether the digest of the
 provided value matches the current value.
@@ -219,6 +219,11 @@ The following L<DBIx::Class::Row> methods are extended by this module:
 
 L<DBIx::Class::DigestColumns>, L<DBIx::Class>, L<Digest>
 
+=head1 COPYRIGHT
+
+Copyright (c) 2008 - 2009 the DBIx::Class::EncodedColumn L</AUTHOR> and
+L</CONTRIBUTORS> as listed below.
+
 =head1 AUTHOR
 
 Guillermo Roditi (groditi) <groditi@cpan.org>
@@ -227,8 +232,13 @@ Inspired by the original module written by Tom Kirkpatrick (tkp) <tkp@cpan.org>
 featuring contributions from Guillermo Roditi (groditi) <groditi@cpan.org>
 and Marc Mims <marc@questright.com>
 
+=head1 CONTRIBUTORS
+
+mst - Matt S Trout <mst@shadowcat.co.uk>
+
 =head1 LICENSE
 
-You may distribute this code under the same terms as Perl itself.
+This library is free software and may be distributed under the same terms
+as perl itself.
 
 =cut

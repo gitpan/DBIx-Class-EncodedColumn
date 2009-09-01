@@ -1,15 +1,18 @@
 ---
 abstract: 'Automatically encode column values'
 author:
-  - 'Guillermo Roditi (groditi) <groditi@cpan.org>'
+  - '- 2009 the DBIx::Class::EncodedColumn L</AUTHOR> and'
 build_requires:
   DBD::SQLite: 0
   Digest::SHA: 0
+  ExtUtils::MakeMaker: 6.42
   File::Spec: 0
   SQL::Translator: 0.08000
   Test::More: 0
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.76'
+generated_by: 'Module::Install version 0.91'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -24,4 +27,4 @@ requires:
   Sub::Name: 0.04
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.00002
+version: 0.00003

@@ -146,42 +146,44 @@ if( $sha_ok ){
 
 #6
 if ( $pgp_ok ) {
-    my $row = $rs->create( {
-        dummy_col          => 'Dummy Column',
-        pgp_col_passphrase => 'Test Encrypted Column with Passphrase',
-        pgp_col_key        => 'Test Encrypted Column with Key Exchange',
-        pgp_col_key_ps     => 'Test Encrypted Column with Key Exchange + Pass',
-    } );
+  my $row = $rs->create( {
+    dummy_col          => 'Dummy Column',
+    pgp_col_passphrase => 'Test Encrypted Column with Passphrase',
+    pgp_col_key        => 'Test Encrypted Column with Key Exchange',
+    pgp_col_key_ps     => 'Test Encrypted Column with Key Exchange + Pass',
+  } );
 
-    like($row->pgp_col_passphrase, qr/BEGIN PGP MESSAGE/, 'Passphrase encrypted');
-    like($row->pgp_col_key, qr/BEGIN PGP MESSAGE/, 'Key encrypted');
-    like($row->pgp_col_key_ps, qr/BEGIN PGP MESSAGE/, 'Key+Passphrase encrypted');
+  like($row->pgp_col_passphrase, qr/BEGIN PGP MESSAGE/, 'Passphrase encrypted');
+  like($row->pgp_col_key, qr/BEGIN PGP MESSAGE/, 'Key encrypted');
+  like($row->pgp_col_key_ps, qr/BEGIN PGP MESSAGE/, 'Key+Passphrase encrypted');
 
-    is(
-        $row->decrypt_pgp_passphrase('Secret Words'),
-        'Test Encrypted Column with Passphrase',
-        'Passphrase decryption/encryption'
-    );
+  is(
+    $row->decrypt_pgp_passphrase('Secret Words'),
+    'Test Encrypted Column with Passphrase',
+    'Passphrase decryption/encryption'
+  );
 
-    is(
-        $row->decrypt_pgp_key,
-        'Test Encrypted Column with Key Exchange',
-        'Key Exchange decryption/encryption'
-    );
+  is(
+    $row->decrypt_pgp_key,
+    'Test Encrypted Column with Key Exchange',
+    'Key Exchange decryption/encryption'
+  );
 
-    is(
-        $row->decrypt_pgp_key_ps('Secret Words'),
-        'Test Encrypted Column with Key Exchange + Pass',
-        'Secured Key Exchange decryption/encryption'
-    );
+  is(
+    $row->decrypt_pgp_key_ps('Secret Words'),
+    'Test Encrypted Column with Key Exchange + Pass',
+    'Secured Key Exchange decryption/encryption'
+  );
 
 
 }
 
-DigestTest->clear;
+END {
+  # In the END section so that the test DB file gets closed before we attempt to unlink it
+  DigestTest::clear($schema);
+}
 
 #TODO
 # -- dies_ok tests when using invalid cyphers and encodings
 
 1;
-

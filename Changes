@@ -1,3 +1,8 @@
+0.00003        2009-09-01
+        - fixup copyright and licensing info to the proposed new best
+          practice for /^DBIx::Class/ modules
+        - close dbh before unlinking so tests pass on win32
+
 0.00002        2008-07-27
         - Support for Crypt::OpenPGP
 
