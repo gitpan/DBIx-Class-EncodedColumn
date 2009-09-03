@@ -1,7 +1,7 @@
 ---
 abstract: 'Automatically encode column values'
 author:
-  - '- 2009 the DBIx::Class::EncodedColumn L</AUTHOR> and'
+  - 'Guillermo Roditi (groditi) <groditi@cpan.org>'
 build_requires:
   DBD::SQLite: 0
   Digest::SHA: 0
@@ -27,4 +27,4 @@ requires:
   Sub::Name: 0.04
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.00003
+version: 0.00004

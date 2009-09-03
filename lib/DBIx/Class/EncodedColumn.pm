@@ -9,7 +9,7 @@ use Sub::Name;
 
 __PACKAGE__->mk_classdata( _column_encoders => {} );
 
-our $VERSION = '0.00003';
+our $VERSION = '0.00004';
 
 sub register_column {
   my $self = shift;
@@ -180,7 +180,7 @@ can create a check method for that column. The check method accepts a plain
 text string, and returns a boolean that indicates whether the digest of the
 provided value matches the current value.
 
-=head2 digest_class
+=head2 encode_class
 
 The class to use for encoding. available classes are:
 
@@ -219,11 +219,6 @@ The following L<DBIx::Class::Row> methods are extended by this module:
 
 L<DBIx::Class::DigestColumns>, L<DBIx::Class>, L<Digest>
 
-=head1 COPYRIGHT
-
-Copyright (c) 2008 - 2009 the DBIx::Class::EncodedColumn L</AUTHOR> and
-L</CONTRIBUTORS> as listed below.
-
 =head1 AUTHOR
 
 Guillermo Roditi (groditi) <groditi@cpan.org>
@@ -235,6 +230,11 @@ and Marc Mims <marc@questright.com>
 =head1 CONTRIBUTORS
 
 mst - Matt S Trout <mst@shadowcat.co.uk>
+
+=head1 COPYRIGHT
+
+Copyright (c) 2008 - 2009 the DBIx::Class::EncodedColumn L</AUTHOR> and
+L</CONTRIBUTORS> as listed above.
 
 =head1 LICENSE
 

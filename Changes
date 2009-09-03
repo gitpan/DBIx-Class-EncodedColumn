@@ -1,3 +1,6 @@
+0.00004        2009-09-03
+        - correct option name typo in the docs (digest_class -> encode_class)
+        - put the .gpg files back into the test so tests pass (mst == fool)
 0.00003        2009-09-01
         - fixup copyright and licensing info to the proposed new best
           practice for /^DBIx::Class/ modules

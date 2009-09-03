@@ -20,3 +20,5 @@ t/02digest.t
 t/lib/DigestTest.pm
 t/lib/DigestTest/Schema.pm
 t/lib/DigestTest/Schema/Test.pm
+t/pubring.gpg
+t/secring.gpg
