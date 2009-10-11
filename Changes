@@ -1,3 +1,7 @@
+
+        - Fix hashing/validation with Whirlpool ( Kent Fredric )
+        - Add Repository META
+
 0.00004        2009-09-03
         - correct option name typo in the docs (digest_class -> encode_class)
         - put the .gpg files back into the test so tests pass (mst == fool)

@@ -46,7 +46,7 @@ sub make_encode_sub {
   my $encoder = sub {
     my ($plain_text, $salt) = @_;
     $salt ||= join('', map { $salt_pool[int(rand(65))] } 1 .. $slen);
-    $object->add($plain_text.$salt);
+    $object->reset()->add($plain_text.$salt);
     my $digest = $object->$format_method;
     #print "${plain_text}\t ${salt}:\t${digest}${salt}\n" if $salt;
     return $digest.$salt;
@@ -175,6 +175,10 @@ L<DBIx::Class::EncodedColumn>, L<Digest>
 Guillermo Roditi (groditi) <groditi@cpan.org>
 
 Based on the Vienna WoC  ToDo manager code by Matt S trout (mst)
+
+=head1 CONTRIBUTORS
+
+See L<DBIx::Class::EncodedColumn>
 
 =head1 LICENSE
 

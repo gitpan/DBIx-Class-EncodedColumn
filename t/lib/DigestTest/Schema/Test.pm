@@ -1,11 +1,12 @@
 package # hide from PAUSE
     DigestTest::Schema::Test;
 
-my ($sha_ok, $bcrypt_ok);
+my ($sha_ok, $bcrypt_ok, $whirlpool_ok);
 BEGIN {
   $sha_ok    = eval 'require Digest' && eval 'require Digest::SHA;';
   $bcrypt_ok = eval 'require Crypt::Eksblowfish::Bcrypt';
   $pgp_ok    = eval 'require Crypt::OpenPGP';
+  $whirlpool_ok = eval 'require Digest; 1' && eval 'require Digest::Whirlpool; 1';
 }
 
 use base qw/DBIx::Class/;
@@ -76,6 +77,35 @@ if( $sha_ok ) {
       encode_class  => 'Digest',
       encode_check_method => 'check_sha256_b64_salted',
       encode_args   => {salt_length => 14}
+    },
+  );
+}
+
+if ( $whirlpool_ok ) {
+
+  __PACKAGE__->add_columns(
+    whirlpool_hex => {
+      data_type => 'char',
+      is_nullable => 1,
+      size => 128,
+      encode_column => 1,
+      encode_class  => 'Digest',
+      encode_args   => {
+        format => 'hex',
+        algorithm => 'Whirlpool',
+      },
+      encode_check_method => 'check_whirlpool_hex',
+    },
+    whirlpool_b64 => {
+      data_type => 'char',
+      is_nullable => 1,
+      size => 86,
+      encode_column => 1,
+      encode_class  => 'Digest',
+      encode_args   => {
+        algorithm => 'Whirlpool',
+      },
+      encode_check_method => 'check_whirlpool_b64',
     },
   );
 }

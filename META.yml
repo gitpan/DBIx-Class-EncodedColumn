@@ -27,4 +27,5 @@ requires:
   Sub::Name: 0.04
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.00004
+  repository: http://dev.catalyst.perl.org/repos/bast/trunk/DBIx-Class-EncodedColumn
+version: 0.00005

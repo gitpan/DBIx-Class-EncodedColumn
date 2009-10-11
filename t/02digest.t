@@ -9,17 +9,20 @@ use File::Spec;
 use FindBin '$Bin';
 use lib File::Spec->catdir($Bin, 'lib');
 
-my ($sha_ok, $bcrypt_ok, $pgp_ok);
+my ($sha_ok, $bcrypt_ok, $pgp_ok, $whirlpool_ok);
+
 BEGIN {
   $sha_ok    = eval 'require Digest' && eval 'require Digest::SHA;';
   $bcrypt_ok = eval 'require Crypt::Eksblowfish::Bcrypt';
   $pgp_ok    = eval 'require Crypt::OpenPGP';
+  $whirlpool_ok = eval 'require Digest; 1' && eval 'require Digest::Whirlpool; 1';
 }
 
 my $tests = 5;
 $tests += 21 if $sha_ok;
 $tests += 6  if $bcrypt_ok;
 $tests += 6  if $pgp_ok;
+$tests += 7  if $whirlpool_ok;
 
 plan tests => $tests;
 
@@ -45,11 +48,30 @@ if( $sha_ok ){
     }
   }
 }
+if ( $whirlpool_ok ) {
+  for my $algorithm( qw/Whirlpool/){
+    my $maker = Digest->new($algorithm);
+    my $encodings = $checks->{$algorithm} = {};
+    for my $encoding (qw/base64 hex/){
+      my $values = $encodings->{$encoding} = {};
+      my $encoding_method = $encoding eq 'binary' ? 'digest' :
+        ($encoding eq 'hex' ? 'hexdigest' : 'b64digest');
+      for my $value (qw/test1 test2/){
+        $maker->reset()->add($value);
+        $values->{$value} = $maker->$encoding_method;
+      }
+    }
+  }
+}
 
 my %create_vals = (dummy_col  => 'test1');
 if( $sha_ok ){
   $create_vals{$_} = 'test1'
     for(qw/sha1_hex sha1_b64 sha256_hex sha256_b64 sha256_b64_salted/);
+}
+if( $whirlpool_ok ){
+  $create_vals{$_} = 'test1'
+    for(qw/whirlpool_hex whirlpool_b64/);
 }
 
 if( $bcrypt_ok ){
@@ -130,6 +152,23 @@ if( $sha_ok ) {
   is($copy->sha1_b64,   $checks->{'SHA-1'}{base64}{test2},  'b64 sha1 on copy');
   is($copy->sha256_hex, $checks->{'SHA-256'}{hex}{test2},   'hex sha256 on copy');
   is($copy->sha256b64,  $checks->{'SHA-256'}{base64}{test2},'b64 sha256 on copy');
+}
+
+# 7
+if( $whirlpool_ok ){
+  is( $row->whirlpool_hex, $checks->{'Whirlpool'}{hex}{test1}, 'Whirlpool hex');
+  is( $row->whirlpool_b64, $checks->{'Whirlpool'}{base64}{test1}, 'Whirlpool b64');
+
+  can_ok( $row, qw/check_whirlpool_hex check_whirlpool_b64/ );
+  ok( $row->check_whirlpool_hex('test1'), 'Checking hex digest_check_method for Whirlpool');
+  ok( $row->check_whirlpool_b64('test1'), 'Checking b64 digest_check_method for Whirlpool');
+
+  $row->whirlpool_hex('test2');
+  is( $row->whirlpool_hex, $checks->{'Whirlpool'}{hex}{test2}, 'Checking accessor (Whirlpool)');
+
+  $row->update({ whirlpool_b64 => 'test2' });
+  is( $row->whirlpool_b64, $checks->{'Whirlpool'}{base64}{test2}, 'Checking Update (Whirlpool)');
+
 }
 
 #1

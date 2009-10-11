@@ -9,7 +9,7 @@ use Sub::Name;
 
 __PACKAGE__->mk_classdata( _column_encoders => {} );
 
-our $VERSION = '0.00004';
+our $VERSION = '0.00005';
 
 sub register_column {
   my $self = shift;
@@ -229,7 +229,11 @@ and Marc Mims <marc@questright.com>
 
 =head1 CONTRIBUTORS
 
+kentnl - Kent Fredric <kentnl@cpan.org>
+
 mst - Matt S Trout <mst@shadowcat.co.uk>
+
+=back
 
 =head1 COPYRIGHT
 

@@ -8,6 +8,8 @@ name 'DBIx-Class-EncodedColumn';
 abstract "Automatically encode column values";
 all_from 'lib/DBIx/Class/EncodedColumn.pm';
 
+repository 'http://dev.catalyst.perl.org/repos/bast/trunk/DBIx-Class-EncodedColumn';
+
 # Specific dependencies
 requires 'DBIx::Class' => '0.06002';
 requires 'Sub::Name' => '0.04';
