@@ -1,4 +1,8 @@
+0.00006        2010-01-15
+        - Fix build_requires version number for SQLA ( Arthur Axel "fREW" Schmidt )
+        - Don't encode undef ( osfameron )
 
+0.00005        2009-10-11
         - Fix hashing/validation with Whirlpool ( Kent Fredric )
         - Add Repository META
 

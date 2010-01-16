@@ -9,7 +9,7 @@ use Sub::Name;
 
 __PACKAGE__->mk_classdata( _column_encoders => {} );
 
-our $VERSION = '0.00005';
+our $VERSION = '0.00006';
 
 sub register_column {
   my $self = shift;
@@ -44,6 +44,7 @@ sub register_column {
 
 sub set_column {
   my $self = shift;
+  return $self->next::method(@_) unless defined $_[1];
   my $encs = $self->_column_encoders;
   if(exists $encs->{$_[0]} && defined(my $encoder = $encs->{$_[0]})){
     return $self->next::method($_[0], $encoder->($_[1]));
@@ -150,7 +151,7 @@ and C<EncodedColumn> performs the operation when the value is set, or on C<new>.
 =item C<DigestColumns> supports only algorithms of the L<Digest> family.
 C<EncodedColumn> employs a set of thin wrappers around different cipher modules
 to provide support for any cipher you wish to use and wrappers are very simple
-to write (typicall less than 30 lines).
+to write (typically less than 30 lines).
 
 =item C<EncodedColumn> supports having more than one encoded column per table
 and each column can use a different cipher.
@@ -158,10 +159,12 @@ and each column can use a different cipher.
 =item C<Encode> adds only one item to the namespace of the object utilizing
 it (C<_column_encoders>).
 
-There is, unfortunately, some features that C<EncodedColumn> doesn't suppor.
+=back
+
+There is, unfortunately, some features that C<EncodedColumn> doesn't support.
 C<DigestColumns> supports changing certain options at runtime, as well as
 the option to not automatically encode values on set. The author of this module
-found these options to be non-essential and ommitted them by design.
+found these options to be non-essential and omitted them by design.
 
 =head1 Options added to add_column
 
@@ -171,7 +174,7 @@ column and all of the defaults will be applied to the rest of the options.
 =head2 encode_enable => 1
 
 Enable automatic encoding of column values. If this option is not set to true
-any other options will become noops.
+any other options will become no-ops.
 
 =head2 encode_check_method => $method_name
 
@@ -232,8 +235,6 @@ and Marc Mims <marc@questright.com>
 kentnl - Kent Fredric <kentnl@cpan.org>
 
 mst - Matt S Trout <mst@shadowcat.co.uk>
-
-=back
 
 =head1 COPYRIGHT
 

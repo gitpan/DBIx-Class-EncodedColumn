@@ -17,7 +17,7 @@ requires 'Sub::Name' => '0.04';
 #build dependencies
 build_requires 'Test::More';
 build_requires 'DBD::SQLite';
-build_requires 'SQL::Translator' => '0.08000';
+build_requires 'SQL::Translator' => '0.11002';
 build_requires 'Digest::SHA';
 build_requires 'File::Spec';
 

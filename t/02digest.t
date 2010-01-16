@@ -19,7 +19,7 @@ BEGIN {
 }
 
 my $tests = 5;
-$tests += 21 if $sha_ok;
+$tests += 22 if $sha_ok;
 $tests += 6  if $bcrypt_ok;
 $tests += 6  if $pgp_ok;
 $tests += 7  if $whirlpool_ok;
@@ -215,6 +215,12 @@ if ( $pgp_ok ) {
   );
 
 
+}
+
+if( $sha_ok ){
+    $row->sha1_hex(undef);
+    $row->update;
+    is($row->sha1_hex, undef, 'Check undef is passed through');
 }
 
 END {

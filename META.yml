@@ -7,7 +7,7 @@ build_requires:
   Digest::SHA: 0
   ExtUtils::MakeMaker: 6.42
   File::Spec: 0
-  SQL::Translator: 0.08000
+  SQL::Translator: 0.11002
   Test::More: 0
 configure_requires:
   ExtUtils::MakeMaker: 6.42
@@ -28,4 +28,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://dev.catalyst.perl.org/repos/bast/trunk/DBIx-Class-EncodedColumn
-version: 0.00005
+version: 0.00006
