@@ -24,3 +24,4 @@ t/lib/DigestTest/Schema/TableB.pm
 t/lib/DigestTest/Schema/Test.pm
 t/pubring.gpg
 t/secring.gpg
+t/var/DigestTest-Schema-1.x-SQLite.sql

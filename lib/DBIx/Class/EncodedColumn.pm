@@ -9,7 +9,7 @@ use Sub::Name;
 
 __PACKAGE__->mk_classdata( '_column_encoders' );
 
-our $VERSION = '0.00007';
+our $VERSION = '0.00008';
 
 sub register_column {
   my $self = shift;
