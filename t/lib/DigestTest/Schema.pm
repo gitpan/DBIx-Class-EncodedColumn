@@ -3,6 +3,6 @@ package # hide from PAUSE
 
 use base qw/DBIx::Class::Schema/;
 
-__PACKAGE__->load_classes(qw/Test/);
+__PACKAGE__->load_classes(qw/Test TableA TableB/);
 
 1;

@@ -17,8 +17,10 @@ META.yml
 README
 t/01load.t
 t/02digest.t
-t/lib/DigestTest.pm
+t/03crosstable_leak.t
 t/lib/DigestTest/Schema.pm
+t/lib/DigestTest/Schema/TableA.pm
+t/lib/DigestTest/Schema/TableB.pm
 t/lib/DigestTest/Schema/Test.pm
 t/pubring.gpg
 t/secring.gpg

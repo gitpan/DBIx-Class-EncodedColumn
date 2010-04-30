@@ -3,11 +3,12 @@
 use strict;
 use warnings;
 use Test::More;
-use Digest;
 
+use Dir::Self;
 use File::Spec;
-use FindBin '$Bin';
-use lib File::Spec->catdir($Bin, 'lib');
+use File::Temp 'tempdir';
+
+use lib File::Spec->catdir(__DIR__, 'lib');
 
 my ($sha_ok, $bcrypt_ok, $pgp_ok, $whirlpool_ok);
 
@@ -27,10 +28,14 @@ $tests += 7  if $whirlpool_ok;
 plan tests => $tests;
 
 #1
-use_ok("DigestTest");
+use_ok('DigestTest::Schema');
 
-my $schema = DigestTest->init_schema;
-my $rs     = $schema->resultset('Test');
+my $tmp = tempdir( CLEANUP => 1 );
+my $db_file = File::Spec->catfile($tmp, 'testdb.sqlite');
+my $schema = DigestTest::Schema->connect("dbi:SQLite:dbname=${db_file}");
+$schema->deploy({}, File::Spec->catdir(__DIR__, 'var'));
+
+my $rs = $schema->resultset('Test');
 
 my $checks = {};
 if( $sha_ok ){
@@ -221,11 +226,6 @@ if( $sha_ok ){
     $row->sha1_hex(undef);
     $row->update;
     is($row->sha1_hex, undef, 'Check undef is passed through');
-}
-
-END {
-  # In the END section so that the test DB file gets closed before we attempt to unlink it
-  DigestTest::clear($schema);
 }
 
 #TODO

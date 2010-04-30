@@ -5,14 +5,15 @@ author:
 build_requires:
   DBD::SQLite: 0
   Digest::SHA: 0
+  Dir::Self: 0
   ExtUtils::MakeMaker: 6.42
   File::Spec: 0
-  SQL::Translator: 0.11002
+  File::Temp: 0
   Test::More: 0
 configure_requires:
   ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.91'
+generated_by: 'Module::Install version 0.95'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -28,4 +29,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://dev.catalyst.perl.org/repos/bast/trunk/DBIx-Class-EncodedColumn
-version: 0.00006
+version: 0.00007

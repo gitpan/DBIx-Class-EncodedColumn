@@ -7,9 +7,9 @@ use base qw/DBIx::Class/;
 use Digest;
 use Sub::Name;
 
-__PACKAGE__->mk_classdata( _column_encoders => {} );
+__PACKAGE__->mk_classdata( '_column_encoders' );
 
-our $VERSION = '0.00006';
+our $VERSION = '0.00007';
 
 sub register_column {
   my $self = shift;
@@ -31,7 +31,7 @@ sub register_column {
 
   defined( my $encode_sub = eval{ $class->make_encode_sub($column, $args) }) ||
     $self->throw_exception("Failed to create encoder with class '$class': $@");
-  $self->_column_encoders->{$column} = $encode_sub;
+  $self->_column_encoders({$column => $encode_sub, %{$self->_column_encoders || {}}});
 
   if ( exists $info->{encode_check_method} && $info->{encode_check_method} ){
     no strict 'refs';

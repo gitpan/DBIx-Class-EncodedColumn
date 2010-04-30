@@ -15,11 +15,12 @@ requires 'DBIx::Class' => '0.06002';
 requires 'Sub::Name' => '0.04';
 
 #build dependencies
-build_requires 'Test::More';
-build_requires 'DBD::SQLite';
-build_requires 'SQL::Translator' => '0.11002';
-build_requires 'Digest::SHA';
-build_requires 'File::Spec';
+test_requires 'Test::More';
+test_requires 'DBD::SQLite';
+test_requires 'Dir::Self';
+test_requires 'File::Temp';
+test_requires 'Digest::SHA';
+test_requires 'File::Spec';
 
 #recommended modules
 feature 'Digest::MD5 Support?',
