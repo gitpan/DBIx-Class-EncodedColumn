@@ -19,27 +19,6 @@ test_requires 'Test::More';
 test_requires 'DBD::SQLite';
 test_requires 'Dir::Self';
 test_requires 'File::Temp';
-test_requires 'Digest::SHA';
 test_requires 'File::Spec';
-
-#recommended modules
-feature 'Digest::MD5 Support?',
-    -default => 1,
-    'Digest',
-    'Digest::MD5';
-
-feature 'Digest::SHA Support?',
-    -default => 1,
-    'Digest',
-    'Digest::SHA';
-
-feature 'Blowfish Support?',
-    -default => 1,
-    'Crypt::Eksblowfish::Bcrypt';
-
-feature  'Crypt::OpenPGP (gpg) Support?',
-    -default => 1,
-    'Crypt::OpenPGP',
-    'Crypt::CAST5_PP';
 
 WriteAll;

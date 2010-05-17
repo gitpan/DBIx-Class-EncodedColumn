@@ -4,12 +4,12 @@ use strict;
 use warnings;
 
 use base qw/DBIx::Class/;
-use Digest;
 use Sub::Name;
 
 __PACKAGE__->mk_classdata( '_column_encoders' );
 
-our $VERSION = '0.00008';
+our $VERSION = '0.00009_1';
+$VERSION = eval $VERSION;
 
 sub register_column {
   my $self = shift;
@@ -185,18 +185,26 @@ provided value matches the current value.
 
 =head2 encode_class
 
-The class to use for encoding. available classes are:
+The class to use for encoding. Available classes are:
 
 =over 4
 
-=item C<Crypt::Eksblowfish::Bcrypt> - uses L<DBIx::Class::EncodedColumn::Crypt::Eksblowfish::Bcrypt>
+=item C<Crypt::Eksblowfish::Bcrypt> - uses
+L<DBIx::Class::EncodedColumn::Crypt::Eksblowfish::Bcrypt> and 
+requires L<Crypt::Eksblowfish::Bcrypt> to be installed
 
 =item C<Digest> - uses L<DBIx::Class::EncodedColumn::Digest>
+requires L<Digest> to be installed as well as the algorithm required
+(L<Digest::SHA>, L<Digest::Whirlpool>, etc)
+
+=item C<Crypt::OpenPGP> - L<DBIx::Class::EncodedColumn::Crypt::OpenPGP>
+and requires L<Crypt::OpenPGP> to be installed
 
 =back
 
 Please see the relevant class's documentation for information about the
-specific arguments accepted by each.
+specific arguments accepted by each and make sure you include the encoding
+algorithm (e.g. L<Crypt::OpenPGP>) in your application's requirements.
 
 =head1 EXTENDED METHODS
 

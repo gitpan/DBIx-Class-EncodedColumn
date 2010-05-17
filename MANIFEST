@@ -15,13 +15,16 @@ Makefile.PL
 MANIFEST			This list of files
 META.yml
 README
-t/01load.t
-t/02digest.t
-t/03crosstable_leak.t
+t/bcrypt.t
+t/class_level_encoders.t
+t/digest_sha.t
 t/lib/DigestTest/Schema.pm
-t/lib/DigestTest/Schema/TableA.pm
-t/lib/DigestTest/Schema/TableB.pm
-t/lib/DigestTest/Schema/Test.pm
-t/pubring.gpg
-t/secring.gpg
+t/lib/DigestTest/Schema/Bcrypt.pm
+t/lib/DigestTest/Schema/PGP.pm
+t/lib/DigestTest/Schema/pubring.gpg
+t/lib/DigestTest/Schema/secring.gpg
+t/lib/DigestTest/Schema/SHA.pm
+t/lib/DigestTest/Schema/Whirlpool.pm
+t/open_pgp.t
 t/var/DigestTest-Schema-1.x-SQLite.sql
+t/whirlpool.t
