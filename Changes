@@ -1,3 +1,5 @@
+0.00010	       2010-08-27
+	- Support for crypt()
 0.00009        2010-05-17
         - Rewritten test suite
 0.00008        2010-04-30

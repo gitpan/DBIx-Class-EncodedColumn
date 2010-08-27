@@ -21,4 +21,6 @@ test_requires 'Dir::Self';
 test_requires 'File::Temp';
 test_requires 'File::Spec';
 
+auto_install;
+
 WriteAll;

@@ -1,13 +1,17 @@
 Changes
+inc/Module/AutoInstall.pm
 inc/Module/Install.pm
+inc/Module/Install/AutoInstall.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
 inc/Module/Install/Fetch.pm
+inc/Module/Install/Include.pm
 inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/DBIx/Class/EncodedColumn.pm
+lib/DBIx/Class/EncodedColumn/Crypt.pm
 lib/DBIx/Class/EncodedColumn/Crypt/Eksblowfish/Bcrypt.pm
 lib/DBIx/Class/EncodedColumn/Crypt/OpenPGP.pm
 lib/DBIx/Class/EncodedColumn/Digest.pm
@@ -17,6 +21,7 @@ META.yml
 README
 t/bcrypt.t
 t/class_level_encoders.t
+t/crypt.t
 t/digest_sha.t
 t/lib/DigestTest/Schema.pm
 t/lib/DigestTest/Schema/Bcrypt.pm
