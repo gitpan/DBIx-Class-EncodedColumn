@@ -1,4 +1,3 @@
-
 use strict;
 use warnings;
 use Test::More;
@@ -10,7 +9,7 @@ use lib File::Spec->catdir(__DIR__, 'lib');
 use DigestTest::Schema;
 
 BEGIN {
-  if( eval 'require Crypt::OpenPGP' ){
+  if( eval 'require Crypt::OpenPGP' && eval 'require Math::Pari' ){
     plan tests => 6;
   } else {
     plan skip_all => 'Crypt::OpenPGP not available';

@@ -23,11 +23,16 @@ no_index:
   directory:
     - inc
     - t
+recommends:
+  Crypt::OpenPGP: 0
+  Digest: 0
+  Digest::SHA: 0
+  Math::Pari: 0
 requires:
-  DBIx::Class: 0.06002
+  DBIx::Class: '0.06002'
   Encode: 0
-  Sub::Name: 0.04
+  Sub::Name: '0.04'
 resources:
   license: http://dev.perl.org/licenses/
   repository: git://github.com/wreis/DBIx-Class-EncodedColumn.git
-version: 0.00012
+version: '0.00013'
